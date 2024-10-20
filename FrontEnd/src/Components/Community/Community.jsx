@@ -1,8 +1,11 @@
 import React from 'react'
+import PostAs from './PostAs/PostAs'
 
 function Community() {
   return (
-    <div>Community</div>
+    <div>
+      <PostAs/>
+    </div>
   )
 }
 
