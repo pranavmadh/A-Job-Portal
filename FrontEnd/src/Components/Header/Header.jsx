@@ -7,8 +7,8 @@ import { faBars, faClose, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const navStyle = ({ isActive }) => 
     isActive 
-    ? "text-green-600 font-bold underline decoration-green-600 underline-offset-[26px] decoration-4" 
-    : "hover:underline underline-offset-[26px] decoration-slate-200 decoration-4 font-semibold text-slate-900";
+    ? "text-remotego font-bold underline decoration-remotego underline-offset-[28px] decoration-4" 
+    : "hover:underline underline-offset-[28px] decoration-slate-200 decoration-4 font-semibold text-slate-900";
 
 const iconStyle = " rounded-full hover:bg-slate-200 p-2"
 
@@ -24,7 +24,7 @@ const Header = () => {
            <header className="flex justify-center px-10 py-4 border-b-2">
             <nav className="flex justify-between w-[92%] items-center">
                 <div>
-                    <h1 className="text-green-600 font-bold text-2xl">RemoteDevs</h1>
+                    <h1 className="text-black font-bold text-2xl">Go<span className="text-remotego">Remote</span></h1>
                 </div>
                 <div className={`md:static absolute bg-white md:min-h-fit min-h-[60vh] left-0 ${isMenu ? "top-[-100%]" : "top-[8%]"} w-full flex items-center md:auto justify-center px-5`}>
                     <ul className="flex md:items-center md:gap-[4vw] gap-[8vh] flex-col md:flex-row">

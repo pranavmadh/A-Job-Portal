@@ -2,14 +2,13 @@ const z = require('zod')
 const bcrypt = require('bcrypt')
 const { userModel } = require('../db')
 const jwt = require('jsonwebtoken')
-const { USER_JWT_PASS } = require('../config')
+const { ADMIN_JWT_PASS } = require('../config')
 
 
-const userSignup = async (req,res) => {
+const companySignup = async (req,res) => {
 
     const bodySchema = z.object({
-        name :  z.string(),
-        username : z.string().min(3).max(20),
+        companyname :  z.string(),
         email : z.string().min(5).max(50).email(),
         password : z.string().min(6).refine((password) => /[A-Z]/.test(password) , {message : "Should contain altleast one Capital Letter"})
         .refine((password) => /[a-z]/.test(password), {message : "Should Contain atleast one Lowercase Letter"}).refine((password) => /[!@#$%^&*()]/.test(password),{message : "Should contian atleast one Special Characters"})
@@ -25,37 +24,22 @@ const userSignup = async (req,res) => {
         return;
     } 
 
-    const name = req.body.name
-    const username = req.body.username
+    const companyname = req.body.companyname
     const email = req.body.email
     const password = req.body.password
     
     const encyptedPassword = await bcrypt.hash(password, 5)
 
-    const user = await userModel.findOne({
-        username : username
-    })
-
-    console.log(user)
-    if(user) {
-        res.status(409).json({
-            success : "false",
-            message : "Username already exist"
-        })
-        return
-    }
-
     try {
         await userModel.create({
-            name : name,
-            username :  username, 
+            companyname : companyname,
             email :  email,
             password : encyptedPassword
         })
     } catch {
         res.status(400).json({
             success :  false,
-            message : "Bad Request / Not Able to input the Database "
+            message : "Bad Request / Not Able to input the Database"
         })
     }
 
@@ -65,7 +49,7 @@ const userSignup = async (req,res) => {
     })
 }
 
-const userLogin = async (req,res) => {
+const companyLogin = async (req,res) => {
     const email =  req.body.email
     const password = req.body.password
 
@@ -77,7 +61,7 @@ const userLogin = async (req,res) => {
     if(!user) {
         res.status(404).json({
             success : false,
-            message : "User Login Failed / User Not Found"
+            message : "Company Login Failed / User Not Found"
         })
         return
     }
@@ -85,11 +69,12 @@ const userLogin = async (req,res) => {
     const passwordMatch = await bcrypt.compare(password,user.password)
 
     if(passwordMatch) {
-        const token = jwt.sign({id : user._id},USER_JWT_PASS)
+        const token = jwt.sign({id : user._id},ADMIN_JWT_PASS)
 
-        res.status(200).cookie("uid",token).json({
+        res.status(200).json({
             success : true,
             message : "Sigin Successfull",
+            token : token
         })
 
     } else {
@@ -100,8 +85,7 @@ const userLogin = async (req,res) => {
     }
 }
 
-
 module.exports =  {
-    userSignup,
-    userLogin
+    companySignup,
+    companyLogin
 }
