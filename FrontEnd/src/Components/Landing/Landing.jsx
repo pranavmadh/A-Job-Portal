@@ -13,7 +13,7 @@ function Landing() {
             <h1 className='md:text-8xl text-5xl font-semibold text-remotego text-balance'>Your Gateway to <span className='text-slate-800'>Work Anywhere</span></h1>
             <h3 className='text-2xl font-semibol text-remotego mt-10'>We connect top remote talent with leading remote companies.</h3>
           </div>
-          <div className='flex gap-4 justify-center mt-6'>
+          <div className='md:flex gap-4 justify-center mt-6 space-y-4 md:space-y-0 '>
             <button className='w-48 h-10 bg-remotego text-white text-lg rounded-3xl font-semibold border-2 border-remotego hover:bg-white hover:text-remotego'>Find Jobs</button>
             <button className='w-48 h-10 bg-white text-remotego text-lg rounded-3xl font-semibold border-2 border-remotego hover:bg-remotego hover:text-white'>Post a Job</button>
           </div>
