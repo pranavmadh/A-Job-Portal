@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
+import UserSignupError from "./UserSignupError";
 
 const UserSignup = () => {
     const [errors, setErrors] = useState({})
+    const [signupError,setSignupError] = useState(false)
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
         name: "",
@@ -12,6 +14,18 @@ const UserSignup = () => {
         password: "",
         confirmPassword: ""
     })
+    const [showError, setShowError] = useState(false);
+
+    useEffect(() => {
+        if (signupError) {
+            setShowError(true);
+            const timer = setTimeout(() => {
+                setShowError(false);
+                setSignupError(false); // Reset signupError after fade-out
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [signupError]);
 
     const handleChange = (e) => {
         setFormData({
@@ -46,21 +60,31 @@ const UserSignup = () => {
         return Object.keys(newError).length === 0
     }
 
-    const setData = async () => {
-        const data = await axios.post('http://localhost:3000/api/v1/user/signup',{
-            name:  formData.name,
-            username : formData.username,
-            email : formData.email,
-            password : formData.password
-        })
-        console.log(data.data.success)
-    }
-    const submitHandler = (e) => {
+    
+    const submitHandler = async (e) => {
         e.preventDefault()
 
         if (validate()) {
-            setData()
-            navigate('/auth/login')
+            try {
+                const response = await axios.post('http://localhost:3000/api/v1/user/signup',{
+                    name:  formData.name,
+                    username : formData.username,
+                    email : formData.email,
+                    password : formData.password
+                })
+                console.log(response.data.success)
+                
+                if(!response.data.success) {
+                    setSignupError(true);
+                } 
+                
+                if(response.data.success) {
+                    navigate('/auth/login')
+                    return
+                }
+            } catch (error) {
+                setSignupError(true); // Handle network or server errors
+            }
         } 
     }
 
@@ -68,7 +92,8 @@ const UserSignup = () => {
     const errorStyle = "text-red-500 text-xs mt-1 w-full"
 
     return (
-        <div className="flex min-h-[85vh] justify-center items-center p-4">
+        <div className="flex min-h-[85vh] justify-center items-center p-4 relative">
+            {showError && <UserSignupError className="fade-out" />}
             <div className="max-w-7xl flex flex-col md:flex-row shadow-lg rounded-xl overflow-hidden">
                 <div className="w-full bg-slate-50 p-4 md:p-8">
                     <div className="mb-4 md:mb-6">

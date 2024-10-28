@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 const UserLogin = () => {
+    const navigate= useNavigate()
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -20,12 +21,18 @@ const UserLogin = () => {
             password : password
         })
 
+        console.log(data.data)
         return data.data.success
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle login logic here
+        if(handleLogin) {
+            navigate('/community')
+        } else {
+            console.log("Not logged in")
+        }
 
     };
 
@@ -33,7 +40,7 @@ const UserLogin = () => {
     const buttonStyle = "bg-remotego text-white h-10 rounded-lg hover:bg-remotego-dark transition duration-300";
 
     return (
-        <div className="flex h-[85vh] justify-center items-center p-4">
+        <div className="flex h-[85vh] justify-center items-center p-4 relative">
             <div className="w-full max-w-md bg-slate-50 shadow-lg rounded-xl p-6 sm:p-8 md:p-10">
                 <div className="mb-6">
                     <h1 className="text-2xl font-bold mb-2">Login to RemoteGo</h1>

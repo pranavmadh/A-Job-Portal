@@ -33,14 +33,15 @@ const userSignup = async (req,res) => {
     const encyptedPassword = await bcrypt.hash(password, 5)
 
     const user = await userModel.findOne({
-        username : username
+        $or : [{username : username},{email : email}]
     })
+    
 
     console.log(user)
     if(user) {
         res.status(409).json({
             success : "false",
-            message : "Username already exist"
+            message : "Username or email already exist"
         })
         return
     }
