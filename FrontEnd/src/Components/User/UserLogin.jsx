@@ -1,12 +1,27 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import UserLoginError from "./UserLoginError";
 const UserLogin = () => {
     const navigate= useNavigate()
+    const [axiosError , setAxiosError] = useState(false)
+    const [showError,setShowError] = useState(false)
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
+
+    useEffect(() => {
+        if(axiosError) {
+            setShowError(true)
+            const timer = setTimeout(() => {
+                setShowError(false)
+                setAxiosError(false)
+            },5000)
+
+            return () => clearTimeout(timer)
+        }
+    },[axiosError])
 
     const handleChange = (e) => {
         setFormData({
@@ -15,25 +30,27 @@ const UserLogin = () => {
         });
     };
 
-    const handleLogin = async () => {
-        const data = await axios.post('http://localhost/3000/api/v1/login',{
-            email : email,
-            password : password
-        })
 
-        console.log(data.data)
-        return data.data.success
-    }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle login logic here
-        if(handleLogin) {
-            navigate('/community')
-        } else {
-            console.log("Not logged in")
-        }
+        axios.defaults.withCredentials = true;
+        try {
+            const response = await axios.post('http://localhost:3000/api/v1/user/login', {
+                email: formData.email,
+                password: formData.password
+            });
+            console.log(response.headers); 
 
+            if (!response.data.success) {
+                setAxiosError(true);
+            } else {
+                navigate('/community');
+            }
+        } catch (error) {
+            console.log("Error:", error);
+            setAxiosError(true);
+        }
     };
 
     const inputStyle = "h-10 w-full rounded-lg border border-gray-300 focus:ring-remotego focus:ring-2 focus:outline-none px-3";
@@ -41,6 +58,7 @@ const UserLogin = () => {
 
     return (
         <div className="flex h-[85vh] justify-center items-center p-4 relative">
+            {showError && <UserLoginError/>}
             <div className="w-full max-w-md bg-slate-50 shadow-lg rounded-xl p-6 sm:p-8 md:p-10">
                 <div className="mb-6">
                     <h1 className="text-2xl font-bold mb-2">Login to RemoteGo</h1>

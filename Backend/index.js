@@ -9,7 +9,10 @@ require('dotenv').config()
 const MONGOOSE_URL = process.env.MONGOOSE_CONNECTION_STRING
 const port  =  process.env.PORT
 
-app.use(cors())
+app.use(cors({
+    origin : "http://localhost:5173",
+    credentials : true
+}))
 app.use(express.json())
 app.use(cookieParser())
 

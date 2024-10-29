@@ -35,7 +35,7 @@ const userSignup = async (req,res) => {
     const user = await userModel.findOne({
         $or : [{username : username},{email : email}]
     })
-    
+
 
     console.log(user)
     if(user) {
@@ -71,6 +71,7 @@ const userLogin = async (req,res) => {
     const password = req.body.password
 
 
+    console.log(email,password)
     const user = await userModel.findOne({
         email : email
     })

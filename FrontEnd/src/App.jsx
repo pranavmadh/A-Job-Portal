@@ -8,9 +8,8 @@ import Salaries from './Components/Salaries/Salaries'
 import Layout from './Components/Layout'
 import Landing from './Components/Landing/Landing'
 import UserSignup from './Components/User/UserSignup'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import UserAuthPage from './Components/User/UserAuthPage'
 import UserLogin from './Components/User/UserLogin'
+import UserAuthPage from './Components/User/UserAuthPage'
 function App() {
   const isLogin = false
 
@@ -27,7 +26,7 @@ function App() {
       <Route path={'/auth'} element={<UserAuthPage/>}/>
       <Route path={'/auth/signup'} element={<UserSignup/>}/>
       <Route path={'/auth/login'} element={<UserLogin/>}/>
-      <Route path={'*'} element={<UserSignup/>}/>
+      <Route path={'*'} element={<Community/>}/>
       </Route>
     </Routes>
     </BrowserRouter>
