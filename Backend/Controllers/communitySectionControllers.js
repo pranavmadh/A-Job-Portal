@@ -1,10 +1,12 @@
 const { userModel, communityPostModel } = require("../db")
+const z = require('zod')
 
 
 const addCommunityPost = async (req,res) => {
     const userId = req.userId
 
     const user = await userModel.findById(userId)
+    console.log(user)
 
     if(!user) {
         res.status(401).json({
@@ -15,7 +17,8 @@ const addCommunityPost = async (req,res) => {
     }
 
     const bodySchema = z.object({
-        description :  z.string().min(10).max(124)
+        description :  z.string().min(10).max(124),
+        isAnonymous : z.boolean()
     })
 
     const parsedData = bodySchema.safeParse(req.body)
@@ -28,24 +31,26 @@ const addCommunityPost = async (req,res) => {
         return
     }
 
-    const description = req.body.description
+    const { description, isAnonymous } = req.body
 
     try {
         await communityPostModel.create({
             author : userId,
+            authorName : user.name,
+            isAnonymous : isAnonymous,
             description : description
         })
-    } catch {
+        res.status(200).json({
+            success : true,
+            message : "Data input Successful"
+        })
+    } catch (error) {
+        console.error('Error creating post:', error)
         res.status(406).json({
             success : false,
             message : "Failed to input data / DataBase Failed"
         })
     }
-
-    res.status(200).json({
-        success : true,
-        message : "Data input Successful"
-    })
 
 }
 
@@ -64,16 +69,30 @@ const getCommunityPost = async (req,res) => {
         return
     }
 
-    const posts =  await communityPostModel.find({})
+    try {
+        const posts = await communityPostModel.find()
 
-    if (!posts) {
-        res.status(404).json({
+        if (!posts || posts.length === 0) {
+            res.status(404).json({
+                success : false,
+                message : "Posts not Found/ Maybe an error on our side/Sorry"
+            })
+            return
+        }
+
+        console.log(posts)
+        res.status(200).json({
+            success : true,
+            posts : posts
+        })
+    } catch (error) {
+        console.error('Error fetching posts:', error)
+        res.status(500).json({
             success : false,
-            message : "Posts not Found/ Maybe an error on our side/Sorry"
+            message : "Error fetching posts"
         })
     }
 
-    res.status(200).json(posts)
 }
 
 module.exports = {addCommunityPost , getCommunityPost}

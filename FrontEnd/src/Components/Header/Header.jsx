@@ -1,8 +1,10 @@
-import { Fragment, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Fragment, useEffect, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {useCookies} from 'react-cookie'
 import { faBell, faUser } from "@fortawesome/free-regular-svg-icons";
 import { faBars, faClose, faSearch } from "@fortawesome/free-solid-svg-icons";
+
 
 
 const navStyle = ({ isActive }) => 
@@ -20,12 +22,10 @@ const Header = () => {
     const [isMenu, setIsMenu] = useState(false)
  
     const navigate = useNavigate()
+    const [cookies] =  useCookies(['uid'])
     const toggleFunction = () => {
         setIsMenu(!isMenu)
     }
-
-    const [isAuthenticate, setIsAuthenticated] = useState(false)
-
     return (
         <Fragment>
            <header className="sticky top-0 z-50 bg-white w-full border-b-2">
@@ -51,7 +51,7 @@ const Header = () => {
                             <li><NavLink to="/auth/login" className={`${navStyle} md:hidden`}>Login</NavLink></li>
                         </ul>
                     </div>
-                    {isAuthenticate ? 
+                    {cookies.uid ? 
                         <div className="flex gap-[2vw] mt-4 md:mt-0">
                             <div className={`flex items-center ${iconStyle}`}>
                                 <FontAwesomeIcon icon={faSearch} size="lg" />

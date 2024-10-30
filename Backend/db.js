@@ -10,6 +10,8 @@ const userSchema = new Schema({
 
 const communityPostSchema = new Schema({
     author : {type : String, ref: 'userSchema'},
+    isAnonymous : {type : Boolean, default : false},
+    authorName : String,
     description : String
 })
 

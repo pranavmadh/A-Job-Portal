@@ -2,11 +2,12 @@ const jwt = require('jsonwebtoken')
 const { USER_JWT_PASS } = require('../config')
 
 const userAuth = (req,res,next) => {
+    
     const token = req.cookies?.uid
 
     console.log(token)
     
-    if(!token) {
+    if(!token || token === undefined) {
         res.status(401).json({
             success : false,
             message : "Authorization Failed!"

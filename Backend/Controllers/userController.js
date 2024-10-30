@@ -102,8 +102,25 @@ const userLogin = async (req,res) => {
     }
 }
 
+const authenticate = async (req,res) => {
+    const cookies = req.cookies
+    const token = jwt.verify(cookies.uid,USER_JWT_PASS)
+
+    if(token) {
+    res.status(200).json({
+        success : true,
+        message : "Authenticated"
+        })
+    } else {
+        res.status(401).json({
+            success : false,
+            message : "Authentication Failed"
+        })
+    }
+}
 
 module.exports =  {
     userSignup,
-    userLogin
+    userLogin,
+    authenticate
 }
