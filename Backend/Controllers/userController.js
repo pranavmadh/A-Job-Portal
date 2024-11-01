@@ -89,9 +89,10 @@ const userLogin = async (req,res) => {
     if(passwordMatch) {
         const token = jwt.sign({id : user._id},USER_JWT_PASS)
 
-        res.status(200).cookie("uid",token).json({
+        res.status(200).json({
             success : true,
             message : "Sigin Successfull",
+            cookies : token
         })
 
     } else {

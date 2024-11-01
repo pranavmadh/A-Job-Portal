@@ -10,6 +10,7 @@ import Landing from './Components/Landing/Landing'
 import UserSignup from './Components/User/UserSignup'
 import UserLogin from './Components/User/UserLogin'
 import UserAuthPage from './Components/User/UserAuthPage'
+import JobSection from './Components/Jobs/JobSection'
 function App() {
   const isLogin = false
 
@@ -20,7 +21,7 @@ function App() {
       <Route path='/' element={<Layout/>}>
       <Route path={'/'} element={isLogin? <Community/> : <Landing/> }/>
       <Route path={'/community'} element={<Community/>}/>
-      <Route path={'/jobs'} element={<Jobs/>}/>
+      <Route path={'/jobs'} element={<JobSection/>}/>
       <Route path={'/companies'} element={<Companies/>}/>
       <Route path={'/salaries'} element={<Salaries/>}/>
       <Route path={'/auth'} element={<UserAuthPage/>}/>

@@ -3,11 +3,15 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { addPostAtom } from '../../../store/atoms/addPost';
 import { anonymousAtom } from '../../../store/atoms/anonymous';
 import axios from 'axios';
+import axiosInstance from '../../../axiosConfig';
+import { postCountAtom } from '../../../store/atoms/postCount';
 
 const AddPostPopup = () => {
     const isPopupVisible = useRecoilValue(addPostAtom);
     const setAddPost = useSetRecoilState(addPostAtom);
+    const setPostCount = useSetRecoilState(postCountAtom)
     const setIsAnonymous = useSetRecoilState(anonymousAtom)
+    const postCount = useRecoilValue(postCountAtom)
     const anonymous = useRecoilValue(anonymousAtom)
     const [texterror, setError] =  useState(false)
     const [postContent, setPostContent] = useState('');
@@ -25,12 +29,11 @@ const AddPostPopup = () => {
            return
         }
 
-        const response = await axios.post('http://localhost:3000/api/v1/user/community/post',{
+        const response = await axiosInstance.post('http://localhost:3000/api/v1/user/community/post',{
             description : postContent,
             isAnonymous : anonymous
         })
-        
-        console.log(response.data)
+        setPostCount(postCount+1)
         setAddPost(false);
     };
 

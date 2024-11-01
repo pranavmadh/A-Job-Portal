@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {useCookies} from 'react-cookie'
 import { faBell, faUser } from "@fortawesome/free-regular-svg-icons";
 import { faBars, faClose, faSearch } from "@fortawesome/free-solid-svg-icons";
 
@@ -22,7 +21,7 @@ const Header = () => {
     const [isMenu, setIsMenu] = useState(false)
  
     const navigate = useNavigate()
-    const [cookies] =  useCookies(['uid'])
+    const token = localStorage.getItem("token")
     const toggleFunction = () => {
         setIsMenu(!isMenu)
     }
@@ -51,7 +50,7 @@ const Header = () => {
                             <li><NavLink to="/auth/login" className={`${navStyle} md:hidden`}>Login</NavLink></li>
                         </ul>
                     </div>
-                    {cookies.uid ? 
+                    {token? 
                         <div className="flex gap-[2vw] mt-4 md:mt-0">
                             <div className={`flex items-center ${iconStyle}`}>
                                 <FontAwesomeIcon icon={faSearch} size="lg" />

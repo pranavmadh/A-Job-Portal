@@ -34,17 +34,16 @@ const UserLogin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        axios.defaults.withCredentials = true;
         try {
             const response = await axios.post('http://localhost:3000/api/v1/user/login', {
                 email: formData.email,
                 password: formData.password
             });
-            console.log(response.headers); 
 
             if (!response.data.success) {
                 setAxiosError(true);
             } else {
+                localStorage.setItem("token",response?.data?.cookies)
                 navigate('/community');
             }
         } catch (error) {

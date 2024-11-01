@@ -3,7 +3,7 @@ const { USER_JWT_PASS } = require('../config')
 
 const userAuth = (req,res,next) => {
     
-    const token = req.cookies?.uid
+    const token = req.headers.authorization
 
     console.log(token)
     

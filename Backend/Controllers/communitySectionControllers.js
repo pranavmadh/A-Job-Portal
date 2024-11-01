@@ -58,6 +58,7 @@ const addCommunityPost = async (req,res) => {
 
 const getCommunityPost = async (req,res) => {
     const userId = req.userId
+    
 
     const user = await userModel.findById(userId)
 
@@ -79,8 +80,6 @@ const getCommunityPost = async (req,res) => {
             })
             return
         }
-
-        console.log(posts)
         res.status(200).json({
             success : true,
             posts : posts
